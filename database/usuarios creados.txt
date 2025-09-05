@@ -1,0 +1,7 @@
+Lista de usuarios creados:
+
+email: carlos@host.com, nombre: Carlos, contraseña: 1234, tipo: HOST
+email: lucia@guest.com, nombre: Lucía, contraseña: abcd, tipo: GUEST
+email: julian@host.com, nombre: Julián, contraseña: asdf, tipo: HOST
+email: maria@guest.com, nombre: María, contraseña: zxcv, tipo: GUEST
+email: sofia@guest.com, nombre: Sofía, contraseña: qwer, tipo: GUEST

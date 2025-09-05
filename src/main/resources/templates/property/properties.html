@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/head :: commonHead('Iniciar Sesión')}"></head>
+
+<body>
+
+	<div th:replace="fragments/navbar :: navbar"></div>
+
+	<div class="filter-bar">
+		<a th:href="@{/property/properties(filter='Cabaña')}" class="filter-btn">
+			<img src="/assets/cabaña.jpeg" alt="Cabaña" class="filter-option-img">
+			Cabaña
+		</a>
+		<a th:href="@{/property/properties(filter='Casa de Campo')}" class="filter-btn">
+			<img src="/assets/casa-campo.jpeg" alt="Casa de Campo" class="filter-option-img">
+			Casa de Campo
+		</a>
+		<a th:href="@{/property/properties(filter='Departamento')}" class="filter-btn">
+			<img src="/assets/departamento.jpeg" alt="Departamento" class="filter-option-img">
+			Departamento
+		</a>
+		<a th:href="@{/property/properties(filter='Mansión')}" class="filter-btn">
+			<img src="/assets/mansion.jpeg" alt="Mansión" class="filter-option-img">
+			Mansión
+		</a>
+		<a th:href="@{/property/properties(filter='Casa particular')}" class="filter-btn">
+			<img src="/assets/casa.jpeg" alt="Casa Particular" class="filter-option-img">
+			Casas Particulares
+		</a>
+		<a href="/property/properties" class="filter-btn">
+			<img src="/assets/all.jpeg" alt="All" class="filter-option-img">
+			Sin Filtro
+		</a>
+	</div>
+	
+	<form th:action="@{/property/properties}" method="get" class="property-filter-form">
+		<input type="hidden" name="filter" th:value="${param.filter}" />
+
+		<label for="maxGuests">Máx. Huéspedes:</label>
+		<input type="number" id="maxGuests" name="maxGuests" min="1" th:value="${param.maxGuests}"
+			class="property-filter-input" />
+
+		<label for="priceMin">Precio Mínimo:</label>
+		<input type="number" id="priceMin" name="priceMin" step="0.01" min="0" th:value="${param.priceMin}"
+			class="property-filter-input" />
+
+		<label for="priceMax">Precio Máximo:</label>
+		<input type="number" id="priceMax" name="priceMax" step="0.01" min="0" th:value="${param.priceMax}"
+			class="property-filter-input" />
+
+		<button type="submit" class="property-filter-btn">Aplicar Filtros</button>
+	</form>
+
+
+	<div th:replace="fragments/property-cards :: cardList(${properties})"></div>
+
+	<div th:replace="fragments/footer :: footer"></div>
+
+</body>
+
+</html>
