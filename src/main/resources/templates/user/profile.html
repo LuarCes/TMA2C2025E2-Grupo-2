@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/head :: commonHead('Mi Perfil')}"></head>
+
+<body>
+	<div th:replace="fragments/navbar :: navbar"></div>
+
+	<section class="title-home">
+		<h1>Mi Perfil</h1>
+		<p>Gestiona tu información personal/p>
+	</section>
+
+	<div class="container property-review-layout">
+		<section class="details">
+			<div class="profile-card">
+				<form th:action="@{/mi-perfil/actualizar}" method="post" th:object="${currentUser}">
+                    <input type="hidden" th:field="*{id}" />
+					<div class="property-attributes">
+						<div class="attribute-card">
+							<p class="attribute-label">Nombre:</p>
+							<input type="text" th:field="*{name}" class="attribute-value editable" required />
+						</div>
+						<div class="attribute-card">
+							<p class="attribute-label">Email:</p>
+							<p class="attribute-value" th:text="${currentUser.email}"></p>
+						</div>
+						<div class="attribute-card">
+							<p class="attribute-label">Rol:</p>
+							<p class="attribute-value" th:text="${currentUser.role}"></p>
+						</div>
+						<div class="attribute-card">
+							<p class="attribute-label">Miembro desde:</p>
+							<p class="attribute-value" th:text="${#temporals.format(currentUser.createdAt, 'dd/MM/yyyy')}"></p>
+						</div>
+					</div>
+					
+					<button type="submit" class="back-button">Guardar Cambios</button>
+				</form>
+			</div>
+		</section>
+	</div>
+
+	<div th:replace="fragments/footer :: footer"></div>
+</body>
+
+</html>
