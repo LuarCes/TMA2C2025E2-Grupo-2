@@ -14,7 +14,7 @@
 				    <span th:text="${#numbers.formatDecimal(property.rating, 1, 1)}">4.5</span>
 				</p>
 				<div class="see-more">
-					<a>Ver más</a>
+					<a th:href="@{/property/{id}(id=${property.id})}">Ver más</a>
 				</div>
 			</div>
 		</div>
