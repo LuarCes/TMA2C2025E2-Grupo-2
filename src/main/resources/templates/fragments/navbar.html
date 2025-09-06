@@ -9,6 +9,7 @@
 				<li><a href="/">Inicio</a></li>
 				<li><a href="/property/properties">Alojamientos</a></li>
 				<li th:if="${currentUser != null}"><a href="/reservation/reservations">Tus Reservas</a></li>
+				<li th:if="${currentUser != null}"><a href="/mi-perfil">Perfil</a></li>
 				
 				<li th:if="${currentUser == null}"><a href="/login">Iniciar Sesión</a></li>
 				<li th:if="${currentUser != null}"><a href="/logout">Logout</a></li>
