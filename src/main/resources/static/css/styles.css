@@ -329,3 +329,248 @@
     color: red;
     font-weight: bold;
 }
+
+
+/* === Tarjetas de atributos (uniforme, incluye anfitrión) === */
+.property-attributes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.attribute-card {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 6px;
+    flex: 1 1 220px;
+    min-width: 220px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    text-align: left;
+}
+
+.attribute-label {
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 4px;
+}
+
+.attribute-value {
+    color: #333;
+    font-size: 0.95rem;
+}
+
+
+/* === Formulario de reseña === */
+#resena-form {
+    margin-top: 30px;
+    text-align: left;
+}
+
+#resena-form textarea {
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+#resena-form button {
+    margin-top: 10px;
+    padding: 0.6rem 1.2rem;
+    background-color: #ff385c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+#resena-form button:hover {
+    background-color: #e12c4b;
+}
+
+
+/* === Reseñas en tarjetas === */
+.review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 15px;
+    padding: 0;
+}
+
+.review-item {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    text-align: left;
+}
+
+.review-comment {
+    margin: 0 0 5px 0;
+    font-size: 15px;
+    line-height: 1.4;
+    color: #333;
+}
+
+.review-meta {
+    color: #666;
+    font-size: 13px;
+}
+
+/* Centrar el buscador dentro de la barra de filtros */
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;   /* 👈 centra todo el formulario */
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* Inputs del filtro, incluido el buscador */
+.filters input[type="text"],
+.filters input[type="number"] {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
+/* Botón aplicar filtros */
+.property-filter-btn {
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.property-filter-btn:hover {
+    background-color: #0056b3;
+}
+
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    justify-content: center;
+}
+
+.back-button {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #ff0000; /* rojo */
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #2980b9;
+}
+
+/* Igualar altura del botón de Favoritos al de Reservar sin afectar otros estilos */
+.favorite-btn {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #28a745; /* verde */
+    color: #fff;
+    padding: 10px 20px;       /* igual que .back-button */
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+    /* claves para igualar altura con "Reservar" sin tocar los demás */
+    font-weight: normal;      /* el bold lo estaba haciendo más alto */
+    font-size: inherit;       /* usa el mismo tamaño que el rojo */
+    line-height: normal;      /* quita extra de alto */
+    margin-top: 10px;         /* igual que .back-button */
+    margin-bottom: 10px;      /* igual que .back-button */
+}
+.favorite-btn:hover {
+    background-color: #218838;
+}
+
+
+/* 🔹 Grilla para propiedades y favoritos */
+.property-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* columnas adaptables */
+    gap: 25px;              /* espacio entre tarjetas */
+    margin-top: 20px;
+}
+
+.property-grid .card {
+    display: flex;
+    flex-direction: column;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.property-grid .image-container {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.property-grid .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* asegura que la imagen no se deforme */
+}
+
+.property-grid .card-body {
+    padding: 15px;
+    text-align: center;
+}
+
+
+/* === Grid de Favoritos (cuadrícula limpia) === */
+.property-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;           /* espacio entre cards */
+    margin-top: 20px;
+    align-items: start;  /* evita solapamientos */
+}
+
+.property-grid .card {
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: auto;        /* 👈 asegura que cada card tenga su propio alto */
+}
+
+.property-grid .image-container {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.property-grid .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.property-grid .card-body {
+    padding: 15px;
+    text-align: center;
+}

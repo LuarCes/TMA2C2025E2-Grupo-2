@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -37,22 +38,28 @@ public class User implements UserDetails {
 		GUEST, HOST
 	}
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER) // 🔹 cargar siempre favoritos junto al usuario
 	@JoinTable(name = "favorites", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "property_id", referencedColumnName = "id"))
-	private Set<Property> favoriteProperties = new HashSet<>();
+	private Set<Property> favorites = new HashSet<>();
 
+	// Métodos de favoritos
 	public void addFavorite(Property property) {
-		this.favoriteProperties.add(property);
+		this.favorites.add(property);
 	}
 
-	public Set<Property> getFavoriteProperties() {
-		return favoriteProperties;
+	public void removeFavorite(Property property) {
+		this.favorites.remove(property);
 	}
 
-	public void setFavoriteProperties(Set<Property> favoriteProperties) {
-		this.favoriteProperties = favoriteProperties;
+	public Set<Property> getFavorites() {
+		return favorites;
 	}
 
+	public void setFavorites(Set<Property> favorites) {
+		this.favorites = favorites;
+	}
+
+	// Métodos de UserDetails
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
@@ -73,6 +80,7 @@ public class User implements UserDetails {
 		return true;
 	}
 
+	// Getters y setters
 	public Long getId() {
 		return id;
 	}
@@ -141,5 +149,4 @@ public class User implements UserDetails {
 	public String getUsername() {
 		return name;
 	}
-
 }

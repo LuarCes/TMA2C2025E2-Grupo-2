@@ -160,7 +160,31 @@ public class PropertyController {
 	@GetMapping("/favorites/{propertyId}")
 	public String toggleFavorite(@PathVariable("propertyId") Long propertyId, HttpSession session) {
 		Long userId = (Long) session.getAttribute("userId");
-		userService.addFavorite(userId, propertyId);
-		return "redirect:/property/properties";
+		if (userId == null) {
+			return "redirect:/login";
+		}
+
+		// Buscar si ya está en favoritos
+		List<Property> favorites = userService.getFavorites(userId);
+		boolean alreadyFavorite = favorites.stream()
+				.anyMatch(fav -> fav.getId().equals(propertyId));
+
+		if (alreadyFavorite) {
+			userService.removeFavorite(userId, propertyId); // 🔹 quitar
+		} else {
+			userService.addFavorite(userId, propertyId); // 🔹 agregar
+		}
+
+		// Redirige de vuelta al detalle de la propiedad
+		return "redirect:/property/" + propertyId;
 	}
+
+	@GetMapping("/favorites")
+	public String listFavorites(HttpSession session, Model model) {
+		Long userId = (Long) session.getAttribute("userId");
+		List<Property> favorites = userService.getFavorites(userId);
+		model.addAttribute("properties", favorites);
+		return "property/favorites";
+	}
+
 }
