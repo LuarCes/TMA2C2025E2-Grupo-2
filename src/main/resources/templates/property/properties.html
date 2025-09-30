@@ -40,11 +40,9 @@
 	
 <form th:action="@{/property/properties}" method="get" class="filters">
 
-    <!-- Buscador de ubicación -->
-    <input type="text" name="query" placeholder="Buscar ubicación"
-           th:value="${param.query}" class="property-filter-input" />
+    <input type="text" name="location" placeholder="Buscar ubicación"
+           th:value="${param.location}" class="property-filter-input" />
 
-    <!-- Filtros existentes -->
     <input type="hidden" name="filter" th:value="${param.filter}" />
 
     <label for="maxGuests">Máx. Huéspedes:</label>

@@ -17,8 +17,14 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
 
 	List<Property> findByHostId(Long id);
 
-	List<Property> findByTitleContainingIgnoreCaseAndMaxGuestsLessThanEqualAndPricePerNightBetween(String title,
-			Integer maxGuests, Double priceMin, Double priceMax);
+	@Query("""
+			    SELECT p FROM Property p
+			    WHERE (:type IS NULL OR LOWER(p.title) LIKE LOWER(CONCAT('%', :type, '%')))
+			      AND (:location IS NULL OR LOWER(p.location) LIKE LOWER(CONCAT('%', :location, '%')))
+			      AND p.maxGuests <= :maxGuests
+			      AND p.pricePerNight BETWEEN :priceMin AND :priceMax
+			""")
+	List<Property> search(@Param("type") String type, @Param("location") String location, @Param("maxGuests") Integer maxGuests, @Param("priceMin") Double priceMin, @Param("priceMax") Double priceMax);
 
 	@Query(value = "SELECT p.* " + "FROM property AS p " + "INNER JOIN favorites AS uf ON p.id = uf.property_id "
 			+ "WHERE uf.user_id = :userId", nativeQuery = true)
