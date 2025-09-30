@@ -23,10 +23,7 @@ public interface UserService {
 
 	void addFavorite(Long userId, Long propertyId);
 
-	void addFavorite(Long userId, Long propertyId);
-
 	void removeFavorite(Long userId, Long propertyId); // 👈 agregar esto
 
-	List<Property> getFavorites(Long userId);
 
 }
