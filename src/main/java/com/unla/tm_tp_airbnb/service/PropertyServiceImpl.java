@@ -53,17 +53,18 @@ public class PropertyServiceImpl implements PropertyService {
 	}
 
 	@Override
-	public List<Property> findByFilters(String type, Integer maxGuests, Double priceMin, Double priceMax) {
-		if (priceMin == null) {
+	public List<Property> findByFilters(String type, String location, Integer maxGuests, Double priceMin, Double priceMax) {
+
+		if (priceMin == null)
 			priceMin = 0.0;
-		}
-
-		if (priceMax == null) {
+		if (priceMax == null)
 			priceMax = Double.MAX_VALUE;
-		}
 
-		Integer integerMaxGuests = maxGuests != null ? maxGuests : Integer.MAX_VALUE;
-		return propertyRepository.findByTitleContainingIgnoreCaseAndMaxGuestsLessThanEqualAndPricePerNightBetween(type,
-				integerMaxGuests, priceMin, priceMax);
+		Integer guests = (maxGuests != null) ? maxGuests : Integer.MAX_VALUE;
+
+		String typeParam = (type != null && !type.isBlank()) ? type : null;
+		String locParam = (location != null && !location.isBlank()) ? location : null;
+
+		return propertyRepository.search(typeParam, locParam, guests, priceMin, priceMax);
 	}
 }

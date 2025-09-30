@@ -8,6 +8,13 @@
 	<div th:replace="fragments/navbar :: navbar"></div>
 
 	<div class="filter-bar">
+
+
+<a href="/property/properties" class="filter-btn">
+			<img src="/assets/all.jpeg" alt="All" class="filter-option-img">
+			Sin Filtro
+		</a>
+
 		<a th:href="@{/property/properties(filter='Cabaña')}" class="filter-btn">
 			<img src="/assets/cabaña.jpeg" alt="Cabaña" class="filter-option-img">
 			Cabaña
@@ -28,29 +35,30 @@
 			<img src="/assets/casa.jpeg" alt="Casa Particular" class="filter-option-img">
 			Casas Particulares
 		</a>
-		<a href="/property/properties" class="filter-btn">
-			<img src="/assets/all.jpeg" alt="All" class="filter-option-img">
-			Sin Filtro
-		</a>
+		
 	</div>
 	
-	<form th:action="@{/property/properties}" method="get" class="property-filter-form">
-		<input type="hidden" name="filter" th:value="${param.filter}" />
+<form th:action="@{/property/properties}" method="get" class="filters">
 
-		<label for="maxGuests">Máx. Huéspedes:</label>
-		<input type="number" id="maxGuests" name="maxGuests" min="1" th:value="${param.maxGuests}"
-			class="property-filter-input" />
+    <input type="text" name="location" placeholder="Buscar ubicación"
+           th:value="${param.location}" class="property-filter-input" />
 
-		<label for="priceMin">Precio Mínimo:</label>
-		<input type="number" id="priceMin" name="priceMin" step="0.01" min="0" th:value="${param.priceMin}"
-			class="property-filter-input" />
+    <input type="hidden" name="filter" th:value="${param.filter}" />
 
-		<label for="priceMax">Precio Máximo:</label>
-		<input type="number" id="priceMax" name="priceMax" step="0.01" min="0" th:value="${param.priceMax}"
-			class="property-filter-input" />
+    <label for="maxGuests">Máx. Huéspedes:</label>
+    <input type="number" id="maxGuests" name="maxGuests" min="1"
+           th:value="${param.maxGuests}" class="property-filter-input" />
 
-		<button type="submit" class="property-filter-btn">Aplicar Filtros</button>
-	</form>
+    <label for="priceMin">Precio Mínimo:</label>
+    <input type="number" id="priceMin" name="priceMin" step="0.01" min="0"
+           th:value="${param.priceMin}" class="property-filter-input" />
+
+    <label for="priceMax">Precio Máximo:</label>
+    <input type="number" id="priceMax" name="priceMax" step="0.01" min="0"
+           th:value="${param.priceMax}" class="property-filter-input" />
+
+    <button type="submit" class="property-filter-btn">Aplicar Filtros</button>
+</form>
 
 
 	<div th:replace="fragments/property-cards :: cardList(${properties})"></div>

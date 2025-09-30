@@ -51,11 +51,15 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findByEmail(email);
 	}
 
+	// 🔹 Obtener favoritos de un usuario
 	@Override
 	public List<Property> getFavorites(Long userId) {
-		return propertyRepository.findFavoritesByUserId(userId);
+		return userRepository.findById(userId)
+				.map(user -> List.copyOf(user.getFavorites())) // usamos el método del entity
+				.orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
 	}
 
+	// 🔹 Agregar favorito
 	@Transactional
 	public void addFavorite(Long userId, Long propertyId) {
 		User user = userRepository.findById(userId)
@@ -63,8 +67,23 @@ public class UserServiceImpl implements UserService {
 		Property prop = propertyRepository.findById(propertyId)
 				.orElseThrow(() -> new EntityNotFoundException("Propiedad no encontrada"));
 
-		if (!user.getFavoriteProperties().contains(prop)) {
+		if (!user.getFavorites().contains(prop)) {
 			user.addFavorite(prop);
+			userRepository.save(user);
+		}
+	}
+
+	// 🔹 Quitar favorito
+	@Override
+	@Transactional
+	public void removeFavorite(Long userId, Long propertyId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+		Property property = propertyRepository.findById(propertyId)
+				.orElseThrow(() -> new EntityNotFoundException("Propiedad no encontrada"));
+
+		if (user.getFavorites().contains(property)) {
+			user.removeFavorite(property);
 			userRepository.save(user);
 		}
 	}

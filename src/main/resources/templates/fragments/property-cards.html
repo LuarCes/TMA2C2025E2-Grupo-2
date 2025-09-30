@@ -9,10 +9,7 @@
 				     alt="Imagen del alojamiento" />
 				<h3 th:text="${property.title}">Título</h3>
 				<p th:text="|$${#numbers.formatDecimal(property.pricePerNight, 1, 2)} USD por noche|">Precio</p>
-				<p>
-				    <img src="/assets/estrella.jpeg" alt="Estrella" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 5px;" />
-				    <span th:text="${#numbers.formatDecimal(property.rating, 1, 1)}">4.5</span>
-				</p>
+				
 				<div class="see-more">
 					<a th:href="@{/property/{id}(id=${property.id})}">Ver más</a>
 				</div>

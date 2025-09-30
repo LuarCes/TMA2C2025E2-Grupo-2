@@ -10,10 +10,7 @@
 				<h3 th:text="${reservation.property.title}">Nombre del alojamiento</h3>
 				<p th:text="'Desde: ' + ${reservation.startDate} + ' hasta: ' + ${reservation.endDate}"></p>
 				<p th:text="|Total: $${#numbers.formatDecimal(reservation.totalPrice, 1, 2)} USD|">Precio total</p>
-				<p>
-				    <img src="/assets/estrella.jpeg" alt="Estrella" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 5px;" />
-				    <span th:text="${#numbers.formatDecimal(reservation.property.rating, 1, 1)}">4.5</span>
-				</p>
+				
 				<div class="see-more">
 					<a th:href="@{/reservation/{id}(id=${reservation.id})}">Ver más</a>
 				</div>

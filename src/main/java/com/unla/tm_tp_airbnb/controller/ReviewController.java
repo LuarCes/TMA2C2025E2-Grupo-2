@@ -1,16 +1,13 @@
 package com.unla.tm_tp_airbnb.controller;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.unla.tm_tp_airbnb.model.Property;
 import com.unla.tm_tp_airbnb.model.Review;
@@ -22,8 +19,10 @@ import com.unla.tm_tp_airbnb.serviceInterface.UserService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/review")
 public class ReviewController {
+
+	@Autowired
+	private ReviewService reviewService;
 
 	@Autowired
 	private PropertyService propertyService;
@@ -31,47 +30,48 @@ public class ReviewController {
 	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private ReviewService reviewService;
+	// POST /reviews/property/{propertyId}
+	@PostMapping("/reviews/property/{propertyId}")
+	public String createTextReview(
+			@PathVariable Long propertyId,
+			String comment, // name="comment" en el formulario
+			HttpSession session,
+			RedirectAttributes ra) {
 
-	@GetMapping("/create-review/{propertyId}")
-	public String createReview(@PathVariable Long propertyId, Model model, HttpSession session) {
-		Property property = propertyService.findById(propertyId)
-				.orElseThrow(() -> new RuntimeException("Propiedad no encontrada"));
+		// Debe estar logueado
+		Long userId = (Long) session.getAttribute("userId");
+		if (userId == null) {
+			ra.addFlashAttribute("reviewError", "Debes iniciar sesión para enviar una reseña.");
+			return "redirect:/login";
+		}
 
-		Long guestId = (Long) session.getAttribute("userId");
-		User guest = userService.findById(guestId).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+		// Validaciones negocio: no vacío y ≤ 500
+		if (comment == null || comment.trim().isEmpty()) {
+			ra.addFlashAttribute("reviewError", "El comentario no puede estar vacío.");
+			return "redirect:/property/" + propertyId;
+		}
+		if (comment.length() > 500) {
+			ra.addFlashAttribute("reviewError", "El comentario no puede superar los 500 caracteres.");
+			return "redirect:/property/" + propertyId;
+		}
 
-		model.addAttribute("property", property);
-		model.addAttribute("guest", guest);
-		model.addAttribute("guestId", guestId);
+		Optional<User> guestOpt = userService.findById(userId);
+		Optional<Property> propOpt = propertyService.findById(propertyId);
+		if (guestOpt.isEmpty() || propOpt.isEmpty()) {
+			ra.addFlashAttribute("reviewError", "No fue posible asociar la reseña al usuario o a la propiedad.");
+			return "redirect:/property/" + propertyId;
+		}
 
-		return "review/create-review";
-	}
-
-	@PostMapping("/submit")
-	public String submitReview(
-			@RequestParam("createdAt") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate createdAt,
-			@RequestParam("rating") double rating, @RequestParam("comment") String comment,
-			@RequestParam("guestId") Long guestId, @RequestParam("propertyId") Long propertyId) {
 		Review review = new Review();
-		review.setCreatedAt(createdAt);
-		review.setRating(rating);
-		review.setComment(comment);
-
-		User guest = userService.findById(guestId).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-		Property property = propertyService.findById(propertyId)
-				.orElseThrow(() -> new RuntimeException("Propiedad no encontrada"));
-
-		review.setGuest(guest);
-		review.setProperty(property);
+		review.setGuest(guestOpt.get());
+		review.setProperty(propOpt.get());
+		review.setComment(comment.trim());
+		review.setCreatedAt(LocalDate.now());
+		// No usamos estrellas: no seteamos rating
 
 		reviewService.save(review);
 
-		double avgRating = reviewService.calculateAverageRatingByPropertyId(propertyId);
-		property.setRating(avgRating);
-		propertyService.save(property);
-
-		return "redirect:/";
+		ra.addFlashAttribute("reviewOk", "Reseña enviada.");
+		return "redirect:/property/" + propertyId;
 	}
 }

@@ -66,20 +66,19 @@ public class PropertyController {
 
 	@GetMapping("/properties")
 	public String listProperties(@RequestParam(required = false) String filter,
-			@RequestParam(required = false) Integer maxGuests, @RequestParam(required = false) Double priceMin,
-			@RequestParam(required = false) Double priceMax, Model model) {
+			@RequestParam(required = false) String location,
+			@RequestParam(required = false) Integer maxGuests,
+			@RequestParam(required = false) Double priceMin,
+			@RequestParam(required = false) Double priceMax,
+			Model model) {
 
-		List<Property> properties;
+		boolean hasAny = (filter != null && !filter.isBlank()) ||
+				(location != null && !location.isBlank()) ||
+				maxGuests != null || priceMin != null || priceMax != null;
 
-		boolean hasTypeFilter = filter != null && !filter.isBlank();
-		boolean hasGuestsFilter = maxGuests != null;
-		boolean hasPriceFilter = priceMin != null || priceMax != null;
-
-		if (hasTypeFilter || hasGuestsFilter || hasPriceFilter) {
-			properties = propertyService.findByFilters(filter, maxGuests, priceMin, priceMax);
-		} else {
-			properties = propertyService.findAll();
-		}
+		List<Property> properties = hasAny
+				? propertyService.findByFilters(filter, location, maxGuests, priceMin, priceMax)
+				: propertyService.findAll();
 
 		model.addAttribute("properties", properties);
 		return "property/properties";
@@ -150,17 +149,32 @@ public class PropertyController {
 		return "redirect:/property/properties-user";
 	}
 
-	@GetMapping("/search")
-	public String searchProperties(@RequestParam("query") String query, Model model, HttpSession session) {
-		List<Property> results = propertyService.findByLocationContainingIgnoreCase(query);
-		model.addAttribute("properties", results);
-		return "index";
-	}
-
 	@GetMapping("/favorites/{propertyId}")
 	public String toggleFavorite(@PathVariable("propertyId") Long propertyId, HttpSession session) {
 		Long userId = (Long) session.getAttribute("userId");
-		userService.addFavorite(userId, propertyId);
-		return "redirect:/property/properties";
+		if (userId == null) {
+			return "redirect:/login";
+		}
+
+		List<Property> favorites = userService.getFavorites(userId);
+		boolean alreadyFavorite = favorites.stream()
+				.anyMatch(fav -> fav.getId().equals(propertyId));
+
+		if (alreadyFavorite) {
+			userService.removeFavorite(userId, propertyId);
+		} else {
+			userService.addFavorite(userId, propertyId);
+		}
+
+		return "redirect:/property/" + propertyId;
 	}
+
+	@GetMapping("/favorites")
+	public String listFavorites(HttpSession session, Model model) {
+		Long userId = (Long) session.getAttribute("userId");
+		List<Property> favorites = userService.getFavorites(userId);
+		model.addAttribute("properties", favorites);
+		return "property/favorites";
+	}
+
 }

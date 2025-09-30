@@ -22,5 +22,5 @@ public interface PropertyService {
 
 	List<Property> findByHostId(Long id);
 
-	List<Property> findByFilters(String type, Integer maxGuests, Double priceMin, Double priceMax);
+	List<Property> findByFilters(String type, String location, Integer maxGuests, Double priceMin, Double priceMax);
 }
