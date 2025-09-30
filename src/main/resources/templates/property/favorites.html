@@ -1,33 +1,33 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-
 <head th:replace="~{fragments/head :: commonHead('Favoritos')}"></head>
 
 <body>
-    <!-- Navbar -->
-    <div th:replace="fragments/navbar :: navbar"></div>
+  <div th:replace="fragments/navbar :: navbar"></div>
 
-    <div class="container">
-        <h2 class="section-title">Tus Alojamientos Favoritos</h2>
+  <div class="container">
+    <h2 style="margin: 16px 0 20px; font-size: 1.8rem; font-weight: 700;">
+      Tus Alojamientos Favoritos
+    </h2>
 
-        <!-- 🔹 Grid de Favoritos -->
-        <div class="property-grid">
-            <div th:each="property : ${properties}" class="card">
-                <div class="image-container">
-                    <img th:if="${property.images != null and !property.images.isEmpty()}"
-                         th:src="@{'/assets/' + ${property.images[0].imageUrl}}"
-                         alt="Imagen del alojamiento"/>
-                </div>
-                <div class="card-body">
-                    <h3 th:text="${property.title}">Título</h3>
-                    <p th:text="|$${property.pricePerNight} USD por noche|"></p>
-                    <a th:href="@{'/property/' + ${property.id}}" class="see-more">Ver más</a>
-                </div>
-            </div>
+    <div class="card-grid" style="gap: 16px;">
+      <div class="card" th:each="property : ${properties}">
+        <div class="image-container">
+          <img th:if="${property.images != null and !property.images.isEmpty()}"
+               th:src="@{/assets/{img}(img=${property.images[0].imageUrl})}"
+               alt="Imagen del alojamiento"
+               style="display:block; width:100%; height:auto;">
         </div>
-    </div>
 
-    <!-- Footer -->
-    <div th:replace="fragments/footer :: footer"></div>
+        <div class="card-body">
+          <h3 th:text="${property.title}">Título</h3>
+          <p th:text="|$${#numbers.formatDecimal(property.pricePerNight, 1, 2)} USD por noche|">Precio</p>
+          <a class="see-more" th:href="@{/property/{id}(id=${property.id})}">Ver más</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>
