@@ -52,6 +52,8 @@ public class PropertyServiceImpl implements PropertyService {
 		return propertyRepository.findByHostId(id);
 	}
 
+	// ...existing code...
+
 	@Override
 	public List<Property> findByFilters(String type, String location, Integer maxGuests, Double priceMin, Double priceMax) {
 

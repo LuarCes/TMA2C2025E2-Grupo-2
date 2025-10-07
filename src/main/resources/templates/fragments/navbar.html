@@ -10,6 +10,8 @@
 				<!-- <li><a href="/property/properties">Alojamientos</a></li> -->
 				<li th:if="${currentUser != null}"><a href="/reservation/reservations">Tus Reservas</a></li>
 				<li th:if="${currentUser != null}"><a href="/property/favorites">Mis Favoritos</a></li>
+				<li th:if="${currentUser != null}"><a href="/property/properties-user">Mis Propiedades</a></li>
+				<!-- Mis Propiedades Publicadas removed; properties-user muestra las propiedades del host -->
 				<li th:if="${currentUser != null}"><a href="/mi-perfil">Perfil</a></li>
 				
 				<li th:if="${currentUser == null}"><a href="/login">Iniciar Sesión</a></li>

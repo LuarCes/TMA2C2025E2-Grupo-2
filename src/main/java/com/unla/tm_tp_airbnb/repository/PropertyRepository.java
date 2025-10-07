@@ -17,6 +17,8 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
 
 	List<Property> findByHostId(Long id);
 
+	// ...existing code...
+
 	@Query("""
 			    SELECT p FROM Property p
 			    WHERE (:type IS NULL OR LOWER(p.title) LIKE LOWER(CONCAT('%', :type, '%')))

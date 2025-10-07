@@ -92,6 +92,8 @@ public class PropertyController {
 		return "property/properties-user";
 	}
 
+	// ...existing code...
+
 	@GetMapping("/new")
 	public String create(Model model) {
 		Property property = new Property();

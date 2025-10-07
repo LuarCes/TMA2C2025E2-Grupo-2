@@ -24,6 +24,7 @@ public class Property {
 	private int maxGuests;
 	private LocalDate createdAt;
 	private double rating;
+	private boolean published = false;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "host_id")
@@ -129,6 +130,14 @@ public class Property {
 
 	public void setRating(double rating) {
 		this.rating = rating;
+	}
+
+	public boolean isPublished() {
+		return published;
+	}
+
+	public void setPublished(boolean published) {
+		this.published = published;
 	}
 
 	@Override
