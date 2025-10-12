@@ -67,4 +67,31 @@ public class PropertyServiceImpl implements PropertyService {
 
 		return propertyRepository.search(typeParam, locParam, guests, priceMin, priceMax);
 	}
+
+	@Override
+    public void toggleStatus(Long propertyId) {
+        Property property = propertyRepository.findById(propertyId)
+            .orElseThrow(() -> new RuntimeException("Propiedad no encontrada"));
+        
+        if ("ACTIVE".equals(property.getStatus())) {
+            property.setStatus("PAUSED");
+        } else {
+            property.setStatus("ACTIVE");
+        }
+        
+        propertyRepository.save(property);
+    }
+
+    @Override
+    public List<Property> findActiveProperties() {
+        return propertyRepository.findByStatus("ACTIVE");
+    }
+
+    @Override
+    public List<Property> findByHostIdAndStatus(Long hostId, String status) {
+        if (status != null) {
+            return propertyRepository.findByHostIdAndStatus(hostId, status);
+        }
+        return propertyRepository.findByHostId(hostId);
+    }
 }

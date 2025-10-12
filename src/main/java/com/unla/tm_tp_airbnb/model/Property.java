@@ -24,6 +24,7 @@ public class Property {
 	private int maxGuests;
 	private LocalDate createdAt;
 	private double rating;
+	private String status = "ACTIVE";
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "host_id")
@@ -130,6 +131,14 @@ public class Property {
 	public void setRating(double rating) {
 		this.rating = rating;
 	}
+
+		public String getStatus() {
+		return status;
+	}
+
+	 public void setStatus(String status) {
+		 this.status = status;
+	 }
 
 	@Override
 	public String toString() {

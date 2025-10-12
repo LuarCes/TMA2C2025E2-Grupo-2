@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <section class="properties" th:fragment="cardListHost(properties)">
+        <div class="card-grid">
+            <div class="card" th:each="property : ${properties}">
+                <img th:if="${property.images != null and !property.images.isEmpty()}"
+                     th:src="@{'/assets/' + ${property.images[0].imageUrl}}" 
+                     alt="Imagen del alojamiento" />
+                <h3 th:text="${property.title}">Título</h3>
+                <p th:text="|$${#numbers.formatDecimal(property.pricePerNight, 1, 2)} USD por noche|">Precio</p>
+                
+                <div class="property-status" th:classappend="${property.status == 'PAUSED'} ? 'status-paused' : 'status-active'">
+                    <span th:text="${property.status == 'PAUSED'} ? 'PAUSADA' : 'ACTIVA'"></span>
+                </div>
+                
+                <div class="property-actions">
+                    <a th:href="@{/property/{id}(id=${property.id})}" class="see-more">Ver más</a>
+                    <div class="toggle-buttons">
+                        <form th:action="@{/property/toggle-status/{id}(id=${property.id})}" method="post" style="display: inline;">
+                            <button type="submit" 
+                                    th:text="${property.status == 'ACTIVE'} ? 'Pausar' : 'Reactivar'"
+                                    th:class="${property.status == 'ACTIVE'} ? 'btn-pause' : 'btn-activate'">
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

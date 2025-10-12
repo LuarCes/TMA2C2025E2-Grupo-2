@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragments/head :: commonHead('Iniciar Sesión')}"></head>
+<head th:replace="~{fragments/head :: commonHead('Mis Propiedades')}"></head>
 
 <body>
 
-	<div th:replace="fragments/navbar :: navbar"></div>
+    <div th:replace="fragments/navbar :: navbar"></div>
 
-	<div th:replace="fragments/property-cards :: cardList(${properties})"></div>
+    <div class="container">
+        <h2 style="margin: 16px 0 20px; font-size: 1.8rem; font-weight: 700;">
+            Mis Propiedades
+        </h2>
+        
+        <div class="button-container" style="margin-bottom: 20px;">
+            <a href="/property/new" class="btn btn-primary" role="button">Crear Nuevo Alojamiento</a>
+        </div>
 
-	<div class="button-container">
-		<a href="/property/new" class="btn btn-primary" role="button">Crear alojamiento</a>
-	</div>
+        <div th:replace="fragments/property-cards-host :: cardListHost(${properties})"></div>
+    </div>
 
-	<div th:replace="fragments/footer :: footer"></div>
+    <div th:replace="fragments/footer :: footer"></div>
 
 </body>
-
 </html>

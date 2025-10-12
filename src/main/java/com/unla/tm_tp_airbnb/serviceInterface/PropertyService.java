@@ -23,4 +23,10 @@ public interface PropertyService {
 	List<Property> findByHostId(Long id);
 
 	List<Property> findByFilters(String type, String location, Integer maxGuests, Double priceMin, Double priceMax);
+
+	void toggleStatus(Long propertyId);
+
+	List<Property> findActiveProperties();
+
+	List<Property> findByHostIdAndStatus(Long hostId, String status);
 }
