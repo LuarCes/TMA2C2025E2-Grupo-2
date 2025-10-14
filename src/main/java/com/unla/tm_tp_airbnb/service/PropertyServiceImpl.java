@@ -89,7 +89,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public List<Property> findByHostIdAndStatus(Long hostId, String status) {
-        if (status != null) {
+        if (status != null && !status.isEmpty()) {
             return propertyRepository.findByHostIdAndStatus(hostId, status);
         }
         return propertyRepository.findByHostId(hostId);

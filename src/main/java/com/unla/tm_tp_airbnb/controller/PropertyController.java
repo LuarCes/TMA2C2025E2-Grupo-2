@@ -85,10 +85,16 @@ public class PropertyController {
 	}
 
 	@GetMapping("/properties-user")
-	public String listPropertiesUsers(HttpSession session, Model model) {
+	public String listPropertiesUsers(@RequestParam(required = false) String status, HttpSession session, Model model) {
 		Long id = (Long) session.getAttribute("userId");
-		List<Property> properties = propertyService.findByHostId(id);
+		List<Property> properties;
+		if (status != null && !status.isEmpty()) {
+            properties = propertyService.findByHostIdAndStatus(id, status);
+        } else {
+            properties = propertyService.findByHostId(id);
+        }
 		model.addAttribute("properties", properties);
+		model.addAttribute("currentFilter", status != null ? status : "all");
 		return "property/properties-user";
 	}
 
