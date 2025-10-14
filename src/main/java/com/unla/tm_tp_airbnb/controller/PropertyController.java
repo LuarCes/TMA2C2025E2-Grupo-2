@@ -78,17 +78,23 @@ public class PropertyController {
 
 		List<Property> properties = hasAny
 				? propertyService.findByFilters(filter, location, maxGuests, priceMin, priceMax)
-				: propertyService.findAll();
+				: propertyService.findActiveProperties();
 
 		model.addAttribute("properties", properties);
 		return "property/properties";
 	}
 
 	@GetMapping("/properties-user")
-	public String listPropertiesUsers(HttpSession session, Model model) {
+	public String listPropertiesUsers(@RequestParam(required = false) String status, HttpSession session, Model model) {
 		Long id = (Long) session.getAttribute("userId");
-		List<Property> properties = propertyService.findByHostId(id);
+		List<Property> properties;
+		if (status != null && !status.isEmpty()) {
+            properties = propertyService.findByHostIdAndStatus(id, status);
+        } else {
+            properties = propertyService.findByHostId(id);
+        }
 		model.addAttribute("properties", properties);
+		model.addAttribute("currentFilter", status != null ? status : "all");
 		return "property/properties-user";
 	}
 
@@ -177,4 +183,16 @@ public class PropertyController {
 		return "property/favorites";
 	}
 
+	@PostMapping("/toggle-status/{id}")
+    public String togglePropertyStatus(@PathVariable Long id, HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        Optional<Property> property = propertyService.findById(id);
+        
+        // Verificar que el usuario es el propietario
+        if (property.isPresent() && property.get().getHost().getId().equals(userId)) {
+            propertyService.toggleStatus(id);
+        }
+        
+        return "redirect:/property/properties-user";
+    }
 }

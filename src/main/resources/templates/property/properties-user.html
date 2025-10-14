@@ -1,20 +1,55 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragments/head :: commonHead('Iniciar Sesión')}"></head>
+<head th:replace="~{fragments/head :: commonHead('Mis Propiedades')}"></head>
 
 <body>
 
-	<div th:replace="fragments/navbar :: navbar"></div>
+    <div th:replace="fragments/navbar :: navbar"></div>
 
-	<div th:replace="fragments/property-cards :: cardList(${properties})"></div>
+    <div class="container">
+        <h2 style="margin: 16px 0 20px; font-size: 1.8rem; font-weight: 700;">
+            Mis Propiedades
+        </h2>
+        
+        <div class="properties-user-actions" style="margin-bottom: 20px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+            <a href="/property/new" class="btn btn-primary btn-custom-width" role="button">Crear Nuevo Alojamiento</a>
+            
+            <!-- Menú desplegable de filtros - Versión corregida -->
+            <div class="dropdown filter-dropdown-custom">
+                <button class="btn filter-dropdown-toggle dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="filter-dropdown-text">
+                        <span th:if="${currentFilter == 'all' || currentFilter == null}">Todas las propiedades</span>
+                        <span th:if="${currentFilter == 'ACTIVE'}">Solo activas</span>
+                        <span th:if="${currentFilter == 'PAUSED'}">Solo pausadas</span>
+                    </span>
+                </button>
+                <ul class="dropdown-menu filter-dropdown-menu" aria-labelledby="filterDropdown">
+                    <li>
+                        <a class="dropdown-item filter-dropdown-item" th:href="@{/property/properties-user}">
+                            Todas las propiedades
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item filter-dropdown-item" th:href="@{/property/properties-user(status='ACTIVE')}">
+                            Solo activas
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item filter-dropdown-item" th:href="@{/property/properties-user(status='PAUSED')}">
+                            Solo pausadas
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
-	<div class="button-container">
-		<a href="/property/new" class="btn btn-primary" role="button">Crear alojamiento</a>
-	</div>
+        <hr style="margin: 0 0 20px 0;">
 
-	<div th:replace="fragments/footer :: footer"></div>
+        <div th:replace="fragments/property-cards-host :: cardListHost(${properties})"></div>
+    </div>
+
+    <div th:replace="fragments/footer :: footer"></div>
 
 </body>
-
 </html>
