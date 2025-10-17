@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/head :: commonHead('Detalle Alojamiento')}"></head>
+
+<body>
+	<div th:replace="fragments/navbar :: navbar"></div>
+
+	<div class="container property-review-layout">
+
+		<section class="details">
+
+			<h2 th:text="${property.title}" class="property-title"></h2>
+
+			<div class="gallery" th:if="${property.images != null and !property.images.isEmpty()}">
+
+				<div class="main-image">
+					<img th:src="@{'/assets/' + ${property.images[0].imageUrl}}" alt="Imagen principal" />
+				</div>
+
+				<div class="image-grid">
+					<div th:each="img, iterStat : ${property.images}"
+						th:if="${iterStat.index > 0 and iterStat.index < 5}">
+						<img th:src="@{'/assets/' + ${img.imageUrl}}" alt="Imagen secundaria" />
+					</div>
+				</div>
+
+			</div>
+
+			<div class="property-info-wrapper">
+
+				<div class="property-attributes">
+					<div class="attribute-card">
+						<p class="attribute-label">Ubicación:</p>
+						<p class="attribute-value" th:text="${property.location}">Ubicación</p>
+					</div>
+					<div class="attribute-card">
+						<p class="attribute-label">Descripción:</p>
+						<p class="attribute-value" th:text="${property.description}">Descripción</p>
+					</div>
+					<div class="attribute-card">
+						<p class="attribute-label">Precio por noche:</p>
+						<p class="attribute-value"
+							th:text="|$${#numbers.formatDecimal(property.pricePerNight, 1, 2)} USD|">Precio</p>
+					</div>
+					<div class="attribute-card">
+						<p class="attribute-label">Máx. Huéspedes:</p>
+						<p class="attribute-value" th:text="${property.maxGuests}">Cantidad</p>
+					</div>
+
+					<!-- 🔹 Datos del anfitrión en tarjeta -->
+					<div class="attribute-card">
+						<p class="attribute-label">Datos del anfitrión:</p>
+						<p class="attribute-value">
+							<strong>Nombre:</strong> <span th:text="${property.host != null ? property.host.name : '—'}">—</span><br>
+							<strong>Teléfono:</strong> <span>—</span><br>
+							<strong>Correo:</strong> <span th:text="${property.host != null ? property.host.email : '—'}">—</span>
+						</p>
+					</div>
+				</div>
+			</div>
+
+		<div class="action-buttons">
+	<!-- Botón reservar -->
+	<a th:if="${property.host != null and property.host.id != null and currentUser != null and currentUser.id != null and property.host.id != currentUser.id}"
+	   th:href="@{/reservation/create-reservation(propertyId=${property.id})}" 
+	   class="back-button">Reservar</a>
+
+	<!-- Botón favoritos -->
+
+  <a th:if="${session.userId != null}"
+     th:href="@{|/property/favorites/${property.id}|}"
+     th:classappend="${isFavorite} ? ' favorite-btn' : ' back-button'">
+     <span th:text="${isFavorite} ? 'Quitar de Favoritos' : 'Agregar a Favoritos'">Agregar a Favoritos</span>
+  </a>
+  	<a href="#" class="back-button">Editar</a>
+	<a href="#" class="back-button">Eliminar</a>
+</div>
+
+
+		<!-- Formulario de reseña -->
+		<section id="resena-form" class="mt-4">
+			<h3>Escribe tu reseña</h3>
+
+			<!-- Mensajes flash -->
+			<div th:if="${reviewError}" class="alert alert-danger" th:text="${reviewError}"></div>
+			<div th:if="${reviewOk}" class="alert alert-success" th:text="${reviewOk}"></div>
+
+			<form th:action="@{|/reviews/property/${property.id}|}" method="post" style="width:100%;">
+				<div style="margin-bottom:10px;">
+					<label for="comment">Comentario (máx. 500):</label>
+					<textarea id="comment" name="comment" maxlength="500" rows="4" required
+						style="width:100%;"></textarea>
+				</div>
+				<button type="submit" class="btn">Enviar reseña</button>
+			</form>
+		</section>
+
+		<!-- Listado reseñas -->
+		<section id="resenas" class="mt-4">
+			<h3>Reseñas</h3>
+
+			<div th:if="${#lists.isEmpty(reviews)}">
+				<p>No hay reseñas disponibles</p>
+			</div>
+
+			<div th:if="${!#lists.isEmpty(reviews)}" class="review-list">
+				<div th:each="r : ${reviews}" class="review-item">
+					<p class="review-comment" th:text="${r.comment}">Comentario...</p>
+					<small class="review-meta">
+						<span th:text="${r.guest != null ? r.guest.name : 'Usuario'}">Usuario</span> —
+						<span th:text="${r.createdAt}">2025-09-21</span>
+					</small>
+				</div>
+			</div>
+		</section>
+
+	</div>
+
+	<div th:replace="fragments/footer :: footer"></div>
+</body>
+
+</html>

@@ -15,7 +15,7 @@
                 </div>
                 
                 <div class="property-actions">
-                    <a th:href="@{/property/{id}(id=${property.id})}" class="see-more">Ver más</a>
+                    <a th:href="@{/property/host/{id}(id=${property.id})}" class="see-more">Ver más</a>
                     <div class="toggle-buttons">
                         <form th:action="@{/property/toggle-status/{id}(id=${property.id})}" method="post" style="display: inline;">
                             <button type="submit" 
